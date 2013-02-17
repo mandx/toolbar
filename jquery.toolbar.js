@@ -54,13 +54,23 @@ if ( typeof Object.create !== 'function' ) {
 
             self.$elem.on('click', function(event) {
                 event.preventDefault();
-                event.stopPropagation();
                 if(self.$elem.hasClass('pressed')) {
                     self.hide();
                 } else {
                     self.show();
                 }
             });
+
+            if (self.options.hideOnClick) {
+                $('html').on("click.toolbar", function ( event ) {
+                    if (event.target != self.elem &&
+                        self.$elem.has(event.target).length === 0 &&
+                        self.toolbar.has(event.target).length === 0 &&
+                        self.toolbar.is(":visible")) {
+                        self.hide();
+                    }
+                });
+            }
 
             $(window).resize(function( event ) {
                 event.stopPropagation();
@@ -167,21 +177,8 @@ if ( typeof Object.create !== 'function' ) {
                     break;
             }
 
-            self.bindHideEvent();
             self.toolbar.show().animate(animation, 200 );
             self.$elem.trigger('toolbarShown');
-        },
-
-        bindHideEvent: function() {
-            var self = this;
-            var hideEvent = "click.toolbar";
-            if(self.options.hideOnClick) {
-                $('html').off(hideEvent).on(hideEvent, function( event ) {
-                    if(self.toolbar.has(event.target).length === 0 ) {
-                        self.hide();
-                    }
-                });
-            }
         },
 
         hide: function() {
