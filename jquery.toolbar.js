@@ -215,7 +215,7 @@ if ( typeof Object.create !== 'function' ) {
     };
 
     $.fn.toolbar = function( options ) {
-        if ($.isPlainObject(options)) {
+        if ($.isPlainObject( options )) {
             return this.each(function() {
                 var toolbarObj = Object.create( ToolBar );
                 toolbarObj.init( options, this );
